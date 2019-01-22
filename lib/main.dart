@@ -10,6 +10,7 @@ import 'package:flutterdemo/routes/drawer.dart';
 import 'package:flutterdemo/routes/text.dart';
 import 'package:flutterdemo/routes/image.dart';
 import 'package:flutterdemo/routes/layout.dart';
+import 'package:flutterdemo/routes/transform.dart';
 import 'package:flutterdemo/routes/demo/zhihu_mine.dart';
 import 'package:flutterdemo/routes/demo/wechat_chatlist.dart';
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/drawer': (context) => DrawerDemo(),
         '/image': (context) => ImageDemo(),
         '/layout': (context) => LayoutDemo(),
+        '/transform': (context) => TransformDemo(),
         '/zhihu_mine': (context) => ZhihuMineDemo(),
         '/wechat_chatlist': (context) => WechatChatListDemo(),
       },

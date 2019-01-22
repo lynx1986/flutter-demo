@@ -36,7 +36,7 @@ Flutter组件的DemoApp
 
 - [ ] Painting
   - [ ] Opacity
-  - [ ] Transform
+  - [x] Transform
   - [ ] DecoratedBox
   - [ ] Clip (ClipOval, ClipPath, ClipRect)
 
