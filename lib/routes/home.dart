@@ -28,6 +28,7 @@ const MENU_ITEM = [
   ],
   [
     { 'name': 'Transform', 'url': '/transform', 'icon': Icons.transform },
+    { 'name': 'Decoration', 'url': '/decoration', 'icon': Icons.border_style},
   ],
   [
 

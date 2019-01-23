@@ -34,11 +34,11 @@ Flutter组件的DemoApp
 
 - [ ] Input
 
-- [ ] Painting
-  - [ ] Opacity
+- [x] Painting
+  - [x] Opacity
   - [x] Transform
-  - [ ] DecoratedBox
-  - [ ] Clip (ClipOval, ClipPath, ClipRect)
+  - [x] DecoratedBox
+  - [x] Clip (ClipOval, ClipPath, ClipRect)
 
 - [ ] Scrolling
   - [ ] Scrollable
