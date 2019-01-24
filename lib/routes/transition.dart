@@ -12,11 +12,11 @@ class TransitionDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Transition Demo')),
-      body: buildBody()
+      body: buildBody(context)
     );
   }
 
-  Widget buildBody() {
+  Widget buildBody(BuildContext context) {
 
     Widget demoImage = Image.asset(Constants.PLAYERS[0]['headimg'], width: IMG_SIZE, height: IMG_SIZE);
     Widget circleImage = ClipRRect(

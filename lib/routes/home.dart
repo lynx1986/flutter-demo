@@ -38,6 +38,7 @@ const MENU_ITEM = [
   ],
   [
     { 'name': 'Transition', 'url': '/transition', 'icon': Icons.rotate_90_degrees_ccw},
+    { 'name': 'Animated', 'url': '/animated', 'icon': Icons.rotate_right},
   ],
   [
     { 'name': '知乎-我的', 'url': '/zhihu_mine', 'icon': SocialBrand.zhihu},

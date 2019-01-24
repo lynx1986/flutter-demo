@@ -13,6 +13,7 @@ import 'package:flutterdemo/routes/layout.dart';
 import 'package:flutterdemo/routes/transform.dart';
 import 'package:flutterdemo/routes/decoration.dart';
 import 'package:flutterdemo/routes/transition.dart';
+import 'package:flutterdemo/routes/animated.dart';
 import 'package:flutterdemo/routes/demo/zhihu_mine.dart';
 import 'package:flutterdemo/routes/demo/wechat_chatlist.dart';
 import 'package:flutterdemo/routes/demo/wechat_friends.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/layout': (context) => LayoutDemo(),
         '/transform': (context) => TransformDemo(),
         '/transition': (context) => TransitionDemo(),
+        '/animated': (context) => AnimatedDemo(),
         '/decoration': (context) => DecorationDemo(),
         '/zhihu_mine': (context) => ZhihuMineDemo(),
         '/wechat_chatlist': (context) => WechatChatListDemo(),
