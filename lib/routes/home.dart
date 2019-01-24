@@ -34,14 +34,15 @@ const MENU_ITEM = [
 
   ],
   [
-
+    
   ],
   [
-
+    { 'name': 'Transition', 'url': '/transition', 'icon': Icons.rotate_90_degrees_ccw},
   ],
   [
     { 'name': '知乎-我的', 'url': '/zhihu_mine', 'icon': SocialBrand.zhihu},
-    { 'name': '微信-微信', 'url': '/wechat_chatlist', 'icon': SocialBrand.wechat}
+    { 'name': '微信-微信', 'url': '/wechat_chatlist', 'icon': SocialBrand.wechat},
+    { 'name': '微信-朋友圈', 'url': '/wechat_friends', 'icon': SocialBrand.wechat_friends}
   ]
 ];
 
@@ -53,13 +54,6 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
 
-  // final widgetItems = const {
-  //   0: { 'name': 'list', 'url': '/list', 'icon': Icons.list },
-  //   1: { 'name': 'card', 'url': '/card', 'icon': Icons.subtitles },
-  //   2: { 'name': 'button', 'url': '/button', 'icon': Icons.radio_button_checked },
-  //   3: { 'name': 'grid', 'url': '/grid', 'icon': Icons.grid_on },
-  //   4: { 'name': 'drawer', 'url': '/drawer', 'icon': Icons.drafts}
-  // };
   final biggerFont = const TextStyle(fontSize: 18.0);
 
   int menuIdx = 0;
@@ -84,7 +78,6 @@ class HomeState extends State<Home> {
   }
 
   Widget buideWidgetItems(BuildContext context) {
-
 
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
