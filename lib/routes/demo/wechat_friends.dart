@@ -16,18 +16,38 @@ class WechatFriendsState extends State<WechatFriendsDemo> with SingleTickerProvi
   AnimationController controller;
   ScrollController listScroller;
 
+  Animation<double> rotateAnimation;
+  Animation<Offset> leaveAnimation;
+
   double HEADER_BG_HEIGHT = 280.0;
   double HEADER_EXPAND_HEIGHT = 200.0;
   double ICON_SIZE = 40.0;
+  double REFRESH_THRESHOLD = 128.0;
 
-  TopDockedFabLocation topFloat = new TopDockedFabLocation(dx: 16.0, dy: 40.0);
+  TopDockedFabLocation topFloat = new TopDockedFabLocation(dx: 16.0, dy: -80);
 
   @override
   void initState() {
     super.initState();
+
     listScroller = new ScrollController(initialScrollOffset: HEADER_EXPAND_HEIGHT);
+    listScroller.addListener(() {
+      if (!controller.isAnimating) {
+        this.setState(() => offsetY = listScroller.offset);
+      }
+    });
+
     controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this, value: 0.0);
-    animation = Tween<double>(begin: 0, end: 1.0).animate(controller);
+    rotateAnimation = Tween<double>(begin: 0, end: 1.0).animate(CurveTween(curve: Interval(0.0, 0.6, curve: Curves.linear)).animate(controller));
+    leaveAnimation = Tween(begin: Offset(0.0, 0.0), end: Offset(0, -5.0)).animate(CurveTween(curve: Interval(0.65, 0.95, curve: Curves.linear)).animate(controller));
+    leaveAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        this.setState(() {
+          offsetY = 200;
+        });
+        controller.reset();
+      }
+    });
   }
 
   @override
@@ -38,18 +58,28 @@ class WechatFriendsState extends State<WechatFriendsDemo> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
+
+    double translateY =  (HEADER_EXPAND_HEIGHT - offsetY);
+    if (translateY > REFRESH_THRESHOLD) translateY = REFRESH_THRESHOLD;
+
     return Scaffold(
       appBar: AppBar(title: Text('微信-朋友圈')),
       body: buildBody(),
-      floatingActionButton: Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.rotationZ(math.pi * ((HEADER_EXPAND_HEIGHT - offsetY) / HEADER_EXPAND_HEIGHT) / 0.5),
-        child: RotationTransition(
-          child: Opacity(
-            opacity: 1,
-            child: Icon(SocialBrand.wechat_friends, size: ICON_SIZE, color: Colors.orange),
+      floatingActionButton: SlideTransition(
+        position: leaveAnimation,
+        child: Transform.translate(
+          offset: Offset(0, translateY),
+          child: Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.rotationZ(math.pi * ((HEADER_EXPAND_HEIGHT - offsetY) / HEADER_EXPAND_HEIGHT) / 0.5),
+            child: RotationTransition(
+              child: Opacity(
+                opacity: 1,
+                child: Icon(SocialBrand.wechat_friends, size: ICON_SIZE, color: Colors.orange),
+              ),
+              turns: rotateAnimation
+            ),
           ),
-          turns: CurvedAnimation(parent: controller, curve: Curves.linear)
         ),
       ),
       floatingActionButtonLocation: topFloat,
@@ -69,17 +99,12 @@ class WechatFriendsState extends State<WechatFriendsDemo> with SingleTickerProvi
     return Listener(
       onPointerUp: ((p) {
         // 松开以后，开始执行旋转的动作
-        this.setState(() {
-          offsetY = 0.0;
-        });
-
+        this.setState(() { offsetY = 0.0; });
+        if (listScroller.offset < HEADER_EXPAND_HEIGHT - REFRESH_THRESHOLD) {
+          controller.forward();
+        }
         if (listScroller.offset < HEADER_EXPAND_HEIGHT) {
-          controller.animateTo(3.0);
-          listScroller.animateTo(
-            HEADER_EXPAND_HEIGHT, 
-            duration: Duration(milliseconds: 500),
-            curve: Curves.linear
-          );
+          listScroller.animateTo(HEADER_EXPAND_HEIGHT,  duration: Duration(milliseconds: 500), curve: Curves.linear);
         }
       }),
       onPointerMove: ((p) {
@@ -97,8 +122,8 @@ class WechatFriendsState extends State<WechatFriendsDemo> with SingleTickerProvi
     
     Map player = Constants.PLAYERS[0];
 
-    double offsetMax = HEADER_EXPAND_HEIGHT - offsetY;
-    if (offsetMax > 60) offsetMax = 60;
+    // double offsetMax = HEADER_EXPAND_HEIGHT - offsetY;
+    // if (offsetMax > 60) offsetMax = 60;
 
     return Container(
       height: HEADER_BG_HEIGHT + HEADER_EXPAND_HEIGHT,
