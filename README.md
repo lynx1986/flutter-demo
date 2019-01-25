@@ -40,9 +40,9 @@ Flutter组件的DemoApp
   - [x] DecoratedBox
   - [x] Clip (ClipOval, ClipPath, ClipRect)
 
-- [ ] Animation
+- [x] Animation
   - [x] Transition
-  - [ ] Animated
+  - [x] Animated
 
 - [ ] Scrolling
   - [ ] Scrollable
