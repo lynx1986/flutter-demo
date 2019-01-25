@@ -61,6 +61,10 @@ class AnimatedDemo extends StatelessWidget {
             ],
           ),
         ),
+        Header(title: '简单Demo'),
+        Display(
+          child: AnimationDemo(),
+        ),
         Header(title: '并行动画'),
         Hint(text: '多种动画同时发生'),
         Display(
@@ -436,4 +440,46 @@ class PlayerBall extends AnimatedWidget {
       ),
     );
   }
+}
+
+class AnimationDemo extends StatefulWidget {
+    AnimationDemoState createState() => AnimationDemoState();
+}
+
+class AnimationDemoState extends State<AnimationDemo> with SingleTickerProviderStateMixin {
+    
+    AnimationController controller;
+    Tween<double> slideTween = Tween(begin: 0.0, end: 20.0);
+    Animation<double> animation;
+    
+    @override
+    void initState() {
+        super.initState();
+        
+        controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+        animation = slideTween.animate(CurvedAnimation(parent: controller, curve: Curves.linear));
+        animation.addListener(() => this.setState(() {}));
+
+        controller.repeat();
+    }
+
+    @override
+    void dispose() {
+      controller.dispose();
+      super.dispose();
+    }
+    
+    @override
+    Widget build(BuildContext context) {
+      return Container(
+        width: 200,
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: animation.value),
+        child: Container(
+          color: Colors.blue,
+          width: 80,
+          height: 80,
+        ),
+      );
+    }
 }
