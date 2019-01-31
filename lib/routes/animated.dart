@@ -65,6 +65,14 @@ class AnimatedDemo extends StatelessWidget {
         Display(
           child: AnimationDemo(),
         ),
+        Header(title: '并行Demo'),
+        Display(
+          child: ParallelDemo(),
+        ),
+        Header(title: '串行Demo'),
+        Display(
+          child: SequencialDemo()
+        ),
         Header(title: '并行动画'),
         Hint(text: '多种动画同时发生'),
         Display(
@@ -442,6 +450,120 @@ class PlayerBall extends AnimatedWidget {
   }
 }
 
+class SequencialDemo extends StatefulWidget {
+  SequencialDemoState createState() => SequencialDemoState();
+}
+
+class SequencialDemoState extends State<SequencialDemo> with SingleTickerProviderStateMixin {
+
+  AnimationController controller;
+  Tween<double> slideTween = Tween(begin: 0.0, end: 200.0);
+  Tween<double> borderTween = Tween(begin: 0.0, end: 40.0);
+  Animation<double> slideAnimation;
+  Animation<double> borderAnimation;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+    slideAnimation = slideTween.animate(CurveTween(curve: Interval(0.0, 0.5, curve: Curves.linear)).animate(controller));
+    borderAnimation = borderTween.animate(CurveTween(curve: Interval(0.5, 1.0, curve: Curves.linear)).animate(controller));
+    slideAnimation.addListener(() => this.setState(() {}));
+    borderAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse();
+      }
+    });
+    slideAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.only(left: slideAnimation.value),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(borderAnimation.value)),
+          color: Colors.blue,
+        ),
+        width: 80,
+        height: 80,
+      ),
+    );
+  }
+}
+
+class ParallelDemo extends StatefulWidget {
+  ParallelDemoState createState() => ParallelDemoState();
+}
+
+class ParallelDemoState extends State<ParallelDemo> with SingleTickerProviderStateMixin {
+
+  AnimationController controller;
+  Tween<double> slideTween = Tween(begin: 0.0, end: 200.0);
+  Tween<double> borderTween = Tween(begin: 0.0, end: 40.0);
+  Animation<double> slideAnimation;
+  Animation<double> borderAnimation;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+    slideAnimation = slideTween.animate(CurvedAnimation(parent: controller, curve: Curves.linear));
+    borderAnimation = borderTween.animate(CurvedAnimation(parent: controller, curve: Curves.linear));
+    slideAnimation.addListener(() => this.setState(() {}));
+    slideAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse();
+      }
+      else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.only(left: slideAnimation.value),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderAnimation.value),
+          color: Colors.blue,
+        ),
+        width: 80,
+        height: 80,
+      ),
+    );
+  }
+}
+
 class AnimationDemo extends StatefulWidget {
     AnimationDemoState createState() => AnimationDemoState();
 }
@@ -449,18 +571,27 @@ class AnimationDemo extends StatefulWidget {
 class AnimationDemoState extends State<AnimationDemo> with SingleTickerProviderStateMixin {
     
     AnimationController controller;
-    Tween<double> slideTween = Tween(begin: 0.0, end: 20.0);
+    Tween<double> slideTween = Tween(begin: 0.0, end: 200.0);
     Animation<double> animation;
     
     @override
     void initState() {
-        super.initState();
-        
-        controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
-        animation = slideTween.animate(CurvedAnimation(parent: controller, curve: Curves.linear));
-        animation.addListener(() => this.setState(() {}));
+      super.initState();
+      
+      controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+      animation = slideTween.animate(CurvedAnimation(parent: controller, curve: Curves.linear));
+      animation.addListener(() => this.setState(() {}));
 
-        controller.repeat();
+      animation.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        }
+        else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      });
+
+      controller.forward();
     }
 
     @override
